@@ -25,7 +25,7 @@
     "eject": "react-scripts eject",
 
     "predeploy": "npm run build", 
-    "deploy": "gh-pages -d build -f" 
+   "deploy": "gh-pages -d build -f --repo https://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@github.com/Kunduz1544/my-app-deploy.git"
 },
 
   "eslintConfig": {

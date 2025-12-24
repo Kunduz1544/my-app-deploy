@@ -1,17 +1,20 @@
-// src/App.js - Тазаланган Код
+// src/App.js - Тазаланган, Firebase'сиз Код
 import React, { useState } from 'react';
 import './App.css'; 
 
-// ЭСКЕРТҮҮ: Firebase импорттору толугу менен алынып салынды!
+// ЭСКЕРТҮҮ: Firebase'ге тиешелүү импорттор толугу менен алынып салынды.
 
 function App() {
-  // Авторизацияга тиешелүү мамлекеттер алынып салынды, анткени Firebase жок
+  // Авторизацияга тиешелүү мамлекеттер
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
-  const [currentUser, setCurrentUser] = useState(null); // Жөнөкөй логика үчүн калды
+  
+  // Учурдагы колдонуучунун абалын сактоо. Firebase жок болгондуктан, 
+  // бул жөнөкөй логика катары гана кызмат кылат.
+  const [currentUser, setCurrentUser] = useState(null); 
 
-  // --- Функциялар (Жөнөкөй, Log-басып чыгаруучу) ---
+  // --- Функциялар (Логиканы симуляциялайт) ---
 
   // 1. Каттоо (Регистрация)
   const handleSignUp = () => {
@@ -19,8 +22,8 @@ function App() {
       setError("Email форматы туура болушу керек жана Пароль 6 белгиден кем болбошу керек.");
       return;
     }
-    setError(`Катталуу: ${email}. Пароль узундугу: ${password.length}.`);
-    // Чыныгы каттоо жок.
+    setError(`Катталуу: ${email} ийгиликтүү.`);
+    // Колдонуучуну жөнөкөй объект катары коюу:
     setCurrentUser({ email: email, uid: Date.now() }); 
   };
 
@@ -31,7 +34,7 @@ function App() {
       return;
     }
     setError(`Кирүү ийгиликтүү! ${email}`);
-    // Чыныгы кирүү жок.
+    // Колдонуучуну жөнөкөй объект катары коюу:
     setCurrentUser({ email: email, uid: Date.now() }); 
   };
 
@@ -52,6 +55,7 @@ function App() {
         <h1 style={{ color: 'green' }}>✅ Кош келиңиз, Личный Кабинет!</h1>
         <p>Кирген $Email$: <strong>{currentUser.email}</strong></p>
         
+        {/* ❗️❗️❗️ СИЗДИН НЕГИЗГИ МААЛЫМАТТАРЫҢЫЗ БУЛ ЖЕРДЕ ❗️❗️❗️ */}
         <div style={{ padding: '20px', border: '2px dashed #007bff', margin: '20px auto', maxWidth: '600px', textAlign: 'left' }}>
             <h2>Менин Жеке Маалыматтарым</h2>
             <p>Учурдагы колдонуучу: {currentUser.email}</p>

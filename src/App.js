@@ -1,12 +1,10 @@
-// src/App.js - 100% Иштеген Код
+// src/App.js - 100% Иштеген жана Оңдолгон Код
 
 import React, { useState, useEffect } from 'react';
 import './App.css'; 
 
-// 1. firebase.js файлынан auth объектисин импорттоо
 import { auth } from './firebase'; 
 
-// 2. Firebase-дин аутентификация функцияларын импорттоо
 import { 
   createUserWithEmailAndPassword, 
   signInWithEmailAndPassword,     
@@ -26,7 +24,6 @@ function App() {
       setCurrentUser(user); 
       setError('');
     });
-    // Компонент жабылганда көзөмөлдөөнү токтотуу
     return unsubscribe;
   }, []);
 
@@ -34,7 +31,6 @@ function App() {
 
   // 1. Каттоо (Регистрация)
   const handleSignUp = async () => {
-    // Паролду жана Email'ди текшерүү
     if (!email || !password || password.length < 6) {
         setError("Email форматы туура болушу керек жана Пароль 6 белгиден кем болбошу керек.");
         return;
@@ -65,10 +61,13 @@ function App() {
     }
   };
 
-  // 3. Чыгуу (Logout)
+  // 3. Чыгуу (Logout) - Чыгуу катасы оңдолгон версия
   const handleSignOut = async () => {
     try {
       await signOut(auth);
+      setError(''); // Чыгуу ийгиликтүү болгондон кийин катаны тазалоо
+      setEmail('');
+      setPassword('');
     } catch (e) {
       setError("Чыгуу катасы: " + e.message);
     }
@@ -86,11 +85,27 @@ function App() {
         {/* ❗️❗️❗️ СИЗДИН НЕГИЗГИ МААЛЫМАТТАРЫҢЫЗ БУЛ ЖЕРДЕ ❗️❗️❗️ */}
         <div style={{ padding: '20px', border: '2px dashed #007bff', margin: '20px auto', maxWidth: '600px', textAlign: 'left' }}>
             <h2>Менин Жеке Маалыматтарым</h2>
-            <p>Бул жерге **мурунку $React$ коддогу мазмунуңузду** (компоненттерди, таблицаларды, маалыматтарды) көчүрүп, чаптаңыз.</p>
-            <p>Мисалы: $Dashboard$ же $Profile$ компонентиңиз бул жерге келет.</p>
+            
+            {/* ⬅️ Бул жерге сиздин мурунку React кодуңуз (таблица, маалымат) келет */}
+            
+            <p>Учурдагы колдонуучу: {currentUser.email}</p>
+            <table style={{ width: '100%', borderCollapse: 'collapse', marginTop: '10px' }}>
+                <thead>
+                    <tr style={{ backgroundColor: '#f2f2f2' }}>
+                        <th style={{ border: '1px solid #ddd', padding: '8px' }}>Актив</th>
+                        <th style={{ border: '1px solid #ddd', padding: '8px' }}>Баасы</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td style={{ border: '1px solid #ddd', padding: '8px' }}>$React$ Долбоору</td>
+                        <td style={{ border: '1px solid #ddd', padding: '8px' }}>$150$ саат</td>
+                    </tr>
+                </tbody>
+            </table>
+            
         </div>
-        {/* ❗️❗️❗️ ❗️❗️❗️ ❗️❗️❗️ */}
-
+        
         <button onClick={handleSignOut} style={{ padding: '10px 20px', backgroundColor: 'red', color: 'white', border: 'none', cursor: 'pointer', borderRadius: '5px', marginTop: '15px' }}>
           Чыгуу ({currentUser.email})
         </button>

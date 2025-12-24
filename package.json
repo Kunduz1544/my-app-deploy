@@ -8,7 +8,6 @@
     "@testing-library/jest-dom": "^6.9.1",
     "@testing-library/react": "^16.3.1",
     "@testing-library/user-event": "^13.5.0",
-    "firebase": "^12.7.0",
     "react": "^19.2.3",
     "react-circular-progressbar": "^2.2.0",
     "react-dom": "^19.2.3",
@@ -23,7 +22,7 @@
     "eject": "react-scripts eject",
     "predeploy": "npm run build",
     "deploy": "gh-pages -d build -f",
-    "postdeploy": "copy build\\index.html build\\404.html" 
+    "postdeploy": "copy build\\index.html build\\404.html"
   },
   "eslintConfig": {
     "extends": [

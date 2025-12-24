@@ -1,93 +1,59 @@
-// src/App.js - 100% Иштеген жана Оңдолгон Код
-
-import React, { useState, useEffect } from 'react';
+// src/App.js - Тазаланган Код
+import React, { useState } from 'react';
 import './App.css'; 
 
-import { auth } from './firebase'; 
-
-import { 
-  createUserWithEmailAndPassword, 
-  signInWithEmailAndPassword,     
-  signOut,                        
-  onAuthStateChanged              
-} from "firebase/auth";
+// ЭСКЕРТҮҮ: Firebase импорттору толугу менен алынып салынды!
 
 function App() {
-  const [currentUser, setCurrentUser] = useState(null); 
+  // Авторизацияга тиешелүү мамлекеттер алынып салынды, анткени Firebase жок
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
+  const [currentUser, setCurrentUser] = useState(null); // Жөнөкөй логика үчүн калды
 
-  // Колдонуучунун абалын көзөмөлдөө
-  useEffect(() => {
-    const unsubscribe = onAuthStateChanged(auth, (user) => {
-      setCurrentUser(user); 
-      setError('');
-    });
-    return unsubscribe;
-  }, []);
-
-  // --- Функциялар ---
+  // --- Функциялар (Жөнөкөй, Log-басып чыгаруучу) ---
 
   // 1. Каттоо (Регистрация)
-  const handleSignUp = async () => {
+  const handleSignUp = () => {
     if (!email || !password || password.length < 6) {
-        setError("Email форматы туура болушу керек жана Пароль 6 белгиден кем болбошу керек.");
-        return;
+      setError("Email форматы туура болушу керек жана Пароль 6 белгиден кем болбошу керек.");
+      return;
     }
-    try {
-      setError('');
-      await createUserWithEmailAndPassword(auth, email, password); 
-      setEmail('');
-      setPassword('');
-    } catch (e) {
-      setError("Катталуу катасы: " + e.message);
-    }
+    setError(`Катталуу: ${email}. Пароль узундугу: ${password.length}.`);
+    // Чыныгы каттоо жок.
+    setCurrentUser({ email: email, uid: Date.now() }); 
   };
 
   // 2. Кирүү (Login)
-  const handleSignIn = async () => {
+  const handleSignIn = () => {
     if (!email || !password) {
-        setError("Email жана Пароль талааларын толтуруңуз.");
-        return;
+      setError("Email жана Пароль талааларын толтуруңуз.");
+      return;
     }
-    try {
-      setError('');
-      await signInWithEmailAndPassword(auth, email, password);
-      setEmail('');
-      setPassword(''); 
-    } catch (e) {
-      setError("Кирүү катасы: Email же пароль туура эмес.");
-    }
+    setError(`Кирүү ийгиликтүү! ${email}`);
+    // Чыныгы кирүү жок.
+    setCurrentUser({ email: email, uid: Date.now() }); 
   };
 
-  // 3. Чыгуу (Logout) - Чыгуу катасы оңдолгон версия
-  const handleSignOut = async () => {
-    try {
-      await signOut(auth);
-      setError(''); // Чыгуу ийгиликтүү болгондон кийин катаны тазалоо
-      setEmail('');
-      setPassword('');
-    } catch (e) {
-      setError("Чыгуу катасы: " + e.message);
-    }
+  // 3. Чыгуу (Logout)
+  const handleSignOut = () => {
+    setCurrentUser(null);
+    setError('Сайттан чыктыңыз.');
+    setEmail('');
+    setPassword('');
   };
 
   // --- UI Компоненттерин Чыгаруу ---
   
-  // Эгер колдонуучу КИРГЕН болсо: Личный Кабинет
   if (currentUser) {
+    // Колдонуучу КИРГЕН болсо: Личный Кабинет
     return (
       <div className="App">
         <h1 style={{ color: 'green' }}>✅ Кош келиңиз, Личный Кабинет!</h1>
         <p>Кирген $Email$: <strong>{currentUser.email}</strong></p>
         
-        {/* ❗️❗️❗️ СИЗДИН НЕГИЗГИ МААЛЫМАТТАРЫҢЫЗ БУЛ ЖЕРДЕ ❗️❗️❗️ */}
         <div style={{ padding: '20px', border: '2px dashed #007bff', margin: '20px auto', maxWidth: '600px', textAlign: 'left' }}>
             <h2>Менин Жеке Маалыматтарым</h2>
-            
-            {/* ⬅️ Бул жерге сиздин мурунку React кодуңуз (таблица, маалымат) келет */}
-            
             <p>Учурдагы колдонуучу: {currentUser.email}</p>
             <table style={{ width: '100%', borderCollapse: 'collapse', marginTop: '10px' }}>
                 <thead>
@@ -103,7 +69,6 @@ function App() {
                     </tr>
                 </tbody>
             </table>
-            
         </div>
         
         <button onClick={handleSignOut} style={{ padding: '10px 20px', backgroundColor: 'red', color: 'white', border: 'none', cursor: 'pointer', borderRadius: '5px', marginTop: '15px' }}>
@@ -114,12 +79,11 @@ function App() {
     );
   }
 
-  // Эгер колдонуучу КИРЕ ЭЛЕК болсо: Кирүү/Катталуу Формасы
+  // Колдонуучу КИРЕ ЭЛЕК болсо: Кирүү/Катталуу Формасы
   return (
     <div className="App" style={{ padding: '50px', textAlign: 'center' }}>
       <h1>Сайтка Кирүү же Катталуу</h1>
       
-      {/* Email талаасы */}
       <input 
         type="email"
         value={email}
@@ -128,7 +92,6 @@ function App() {
         style={{ padding: '10px', margin: '5px', width: '250px', border: '1px solid #ccc' }}
       />
       
-      {/* Пароль талаасы */}
       <input 
         type="password"
         value={password}
@@ -151,7 +114,6 @@ function App() {
         </button>
       </div>
 
-      {/* Ката жөнүндө билдирүү */}
       {error && <p style={{ color: 'red', marginTop: '15px', fontWeight: 'bold' }}>{error}</p>}
     </div>
   );

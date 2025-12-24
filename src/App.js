@@ -1,4 +1,4 @@
-// src/App.js - 100% Туура Иштеген Акыркы Код
+// src/App.js - 100% Иштеген Код
 
 import React, { useState, useEffect } from 'react';
 import './App.css'; 
@@ -26,6 +26,7 @@ function App() {
       setCurrentUser(user); 
       setError('');
     });
+    // Компонент жабылганда көзөмөлдөөнү токтотуу
     return unsubscribe;
   }, []);
 
@@ -86,7 +87,7 @@ function App() {
         <div style={{ padding: '20px', border: '2px dashed #007bff', margin: '20px auto', maxWidth: '600px', textAlign: 'left' }}>
             <h2>Менин Жеке Маалыматтарым</h2>
             <p>Бул жерге **мурунку $React$ коддогу мазмунуңузду** (компоненттерди, таблицаларды, маалыматтарды) көчүрүп, чаптаңыз.</p>
-            <p>Мисалы: Сиздин Dashboard компонентиңиз бул жерге келет.</p>
+            <p>Мисалы: $Dashboard$ же $Profile$ компонентиңиз бул жерге келет.</p>
         </div>
         {/* ❗️❗️❗️ ❗️❗️❗️ ❗️❗️❗️ */}
 
